@@ -31,7 +31,7 @@
 			<link type="contrib" href="https://www.phpbb.com/community/viewtopic.php?f=46&amp;t=2122998" lang="en">Dynamic description developed by AmigoJack</link>
 		</link-group>
 
-		<mod-version>0.3.0</mod-version>
+		<mod-version>0.3.1</mod-version>
 
 		<installation>
 			<level>beginner</level>
@@ -141,14 +141,15 @@ page_header($user->lang['VIEW_TOPIC'] . ' - ' . $topic_data['topic_title'], true
 $first_image = true;
 //
 //
-$sMetaImage=array();
 if (!empty($sMetaImage)) {
 	$s_image_attachid = ((!$first_image) ? $sMetaImage['0'] : array_pop($sMetaImage));
 }
-else {
+else if (!empty($sMetaBBCImage)) {
 	$s_bbc_image = html_entity_decode(($first_image) ? $sMetaBBCImage['0'] : array_pop($sMetaBBCImage));
 }
-$s_video_url = html_entity_decode(($first_image) ? $sMetaBBCVideo['0'] : array_pop($sMetaBBCVideo));
+if (!empty($sMetaBBCVideo)) {
+	$s_video_url = html_entity_decode(($first_image) ? $sMetaBBCVideo['0'] : array_pop($sMetaBBCVideo));
+}
 //
 //
 $template-> assign_vars
