@@ -26,7 +26,7 @@
 		<link-group>
 			<link type="Dependency" href="https://www.phpbb.com/customise/db/mod/canonical_url/" lang="en">Canonical URL</link>
 			<link type="Dependency" href="https://www.phpbb.com/customise/db/bbcode/video/" lang="en">phpBB Video bbcode</link>
-			<link type="text" href="http://www.cocking.com/dynamic-facebook-twitter-meta-tags-phpbb/" lang="en">Modification Overview and Download</link>
+			<link type="text" href="https://github.com/LotusJeff/phpbb-facebook-twitter-tags" lang="en">Modification Overview and Download</link>
 			<link type="text" href="https://www.phpbb.com/community/viewtopic.php?f=70&amp;t=2218256" lang="en">Support and Modification Forum Location at phpBB.com</link>
 			<link type="contrib" href="https://www.phpbb.com/community/viewtopic.php?f=46&amp;t=2122998" lang="en">Dynamic description developed by AmigoJack</link>
 		</link-group>
