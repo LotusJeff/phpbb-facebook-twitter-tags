@@ -25,6 +25,7 @@
 
 		<link-group>
 			<link type="Dependency" href="https://www.phpbb.com/customise/db/mod/canonical_url/" lang="en">Canonical URL</link>
+			<link type="Dependency" href="https://www.phpbb.com/customise/db/bbcode/video/" lang="en">phpBB Video bbcode</link>
 			<link type="text" href="http://www.cocking.com/dynamic-facebook-twitter-meta-tags-phpbb/" lang="en">Modification Overview and Download</link>
 			<link type="text" href="https://www.phpbb.com/community/viewtopic.php?f=70&amp;t=2218256" lang="en">Support and Modification Forum Location at phpBB.com</link>
 			<link type="contrib" href="https://www.phpbb.com/community/viewtopic.php?f=46&amp;t=2122998" lang="en">Dynamic description developed by AmigoJack</link>
@@ -43,8 +44,9 @@
 				<date>2014-03-05</date>
 				<rev-version>0.3.0</rev-version>
 				<changelog lang="en">
-					<change>Fixed issues undefined variables</change>
-					<change>TBD</change>
+					<change>Fixed issues with undefined variables</change>
+					<change>New Feature:  Enabled options to select first image or last image in topic.</change>
+					<change>New Feature:  Added support for Video BBCode. You are required to use bbcode of [video][/video]. If you use an alternate model, you will need to edit the source code.</change>
 				</changelog>
 			</entry>
 			<entry>
@@ -202,7 +204,6 @@ If you have some other mod that provides the current page. This can be a variety
 You will need to find the corresponding tag and swap it out for the {U_CANONICAL} tag.
 
 Step 2:
-
 You will need to replace "***Default image URL Goes Here***" with the URL for your default image. 
 Your non-topic pages and your topics that do not contain an image attachment will require a default image. 
 This will need to be the full url to the image including the http://.
@@ -223,6 +224,9 @@ g. Click the "Apply Permissions" button.
 Step 4:
 
 Test. You can go to Facebook Developers Toolbox and test your Open Graph tags at http://developers.facebook.com/tools/debug/.
+
+Setp 5:
+The code will select the first image available. if you would like the last image used, you will need to change the $first_image to false.
 
 I hope this helps.
 		]]></diy-instructions>
