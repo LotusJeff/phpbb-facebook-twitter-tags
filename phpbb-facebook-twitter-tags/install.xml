@@ -30,21 +30,29 @@
 			<link type="contrib" href="https://www.phpbb.com/community/viewtopic.php?f=46&amp;t=2122998" lang="en">Dynamic description developed by AmigoJack</link>
 		</link-group>
 
-		<mod-version>0.2.0</mod-version>
+		<mod-version>0.3.0</mod-version>
 
 		<installation>
 			<level>beginner</level>
 			<time>600</time>
-			<target-version>3.0.18</target-version>
+			<target-version>3.0.19</target-version>
 		</installation>
 
 		<history>
 			<entry>
+				<date>2014-03-05</date>
+				<rev-version>0.3.0</rev-version>
+				<changelog lang="en">
+					<change>Fixed issues undefined variables</change>
+					<change>TBD</change>
+				</changelog>
+			</entry>
+			<entry>
 				<date>2013-12-22</date>
 				<rev-version>0.2.0</rev-version>
 				<changelog lang="en">
-					<change>Added support for [img] BBCodes.
-						Fixed issue with length of description for twitter to be only 140 charaters long.</change>
+					<change>Added support for [img] BBCodes.</change>
+					<change>Fixed issue with length of description for twitter to be only 140 charaters long.</change>
 				</changelog>
 			</entry>			
 			<entry>
@@ -63,9 +71,19 @@
 			<find><![CDATA[// Define the global bbcode bitfield, will be used to load bbcodes]]></find>
 			<action type="before-add"><![CDATA[
 //**** Dynamic Facebook Mod
-if (strpos($row['post_text'],'[img') !== false) {
-	preg_match('%\[img[a-z0-9:][^\]]*\](.*?)\[/img%', $row['post_text'],$sMetaBBCImage[]);
-}
+	if (strpos($row['post_text'],'[img') !== false) {
+		preg_match_all('%\[img[a-z0-9:][^\]]*\](.*?)\[/img%', $row['post_text'],$sMetaResult);
+		foreach ($sMetaResult['1'] as $value) {
+			$sMetaBBCImage[] = $value;
+		}
+	}
+	if (strpos($row['post_text'],'[video') !== false) {
+		preg_match_all('%\[video[a-z0-9:][^\]]*\](.*?)\[/video%', $row['post_text'],$sMetaResult);
+		foreach ($sMetaResult['1'] as $value) {
+			$sMetaBBCVideo[] = $value;
+		}
+	}
+	$sMetaImage = array();
 /*** Dynamic Facebook Mod END ***/
 ]]></action>
 			</edit>
@@ -73,7 +91,7 @@ if (strpos($row['post_text'],'[img') !== false) {
 			<find><![CDATA[$message = censor_text($row['post_text']);]]></find>
 			<action type="after-add"><![CDATA[
 //**** Dynamic Facebook Mod
-if( !$sMetaDescription ) {
+if (!isset($sMetaDescription)) { 	
     $sMetaDescription= preg_replace
         ( array
             ( '#\\[([^/\\]=]+)[^\\]]*\\]#'  // Strip possible BBCode opening tags
@@ -105,7 +123,7 @@ if( !$sMetaDescription ) {
 //**** Dynamic Facebook Mod
 $sImageTypesVar = array ("jpg", "jpeg", "gif", "png");
 if(in_array($row['extension'], $sImageTypesVar)) {
-	$sMetaImage = $row['attach_id'];
+	$sMetaImage[] = $row['attach_id'];
 }
 /*** Dynamic Facebook Mod END ***/
 ]]></action>
@@ -115,14 +133,31 @@ if(in_array($row['extension'], $sImageTypesVar)) {
 page_header($user->lang['VIEW_TOPIC'] . ' - ' . $topic_data['topic_title'], true, $forum_id);]]></find>
 			<action type="before-add"><![CDATA[
 //**** Dynamic Facebook Mod
+//
+// change to false to get the last image of the topic 
+//
+$first_image = true;
+//
+//
+$sMetaImage=array();
+if (!empty($sMetaImage)) {
+	$s_image_attachid = ((!$first_image) ? $sMetaImage['0'] : array_pop($sMetaImage));
+}
+else {
+	$s_bbc_image = html_entity_decode(($first_image) ? $sMetaBBCImage['0'] : array_pop($sMetaBBCImage));
+}
+$s_video_url = html_entity_decode(($first_image) ? $sMetaBBCVideo['0'] : array_pop($sMetaBBCVideo));
+//
+//
 $template-> assign_vars
 ( array
     ( 'S_META_DESCRIPTION' => $sMetaDescription
-    	,'S_IMAGE_ATTACH_ID' => $sMetaImage
-	   	,'S_BBC_IMAGE_URL' => html_entity_decode($sMetaBBCImage['0']['1'])
+    	,'S_IMAGE_ATTACH_ID' => $s_image_attachid
+	   	,'S_BBC_IMAGE_URL' => $s_bbc_image
+	   	,'S_BBC_VIDEO_URL' => $s_video_url
     ) 
 );
-/*** Dynamic Facebook Mod END ***/ 
+/*** Dynamic Facebook Mod END ***/
 ]]></action>
 			</edit>	
 		</open>
@@ -139,6 +174,7 @@ $template-> assign_vars
 <meta property="og:site_name" content="{SITENAME}" />
 <!-- IF S_META_DESCRIPTION --><meta property="og:description" content="{S_META_DESCRIPTION}" /><!-- ELSE --><meta property="og:description" content="{SITE_DESCRIPTION}"/><!-- ENDIF -->
 <!-- IF S_IMAGE_ATTACH_ID --><meta property="og:image" content="{BOARD_URL}download/file.php?id={S_IMAGE_ATTACH_ID}&amp;mode=view" /><!-- ELSEIF S_BBC_IMAGE_URL --><meta property="og:image" content="{S_BBC_IMAGE_URL}" /><!-- ELSE --><meta property="og:image" content="***Default image URL Goes Here***" /><!-- ENDIF -->
+<!-- IF S_BBC_VIDEO_URL --><meta property="og:video" content="{S_BBC_VIDEO_URL}" /><!-- ENDIF -->
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:url" content="{U_CANONICAL}" />
 <meta name="twitter:title" content="{PAGE_TITLE}" />
