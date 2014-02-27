@@ -31,7 +31,7 @@
 			<link type="contrib" href="https://www.phpbb.com/community/viewtopic.php?f=46&amp;t=2122998" lang="en">Dynamic description developed by AmigoJack</link>
 		</link-group>
 
-		<mod-version>0.3.1</mod-version>
+		<mod-version>0.3.2</mod-version>
 
 		<installation>
 			<level>beginner</level>
@@ -42,11 +42,12 @@
 		<history>
 			<entry>
 				<date>2014-03-05</date>
-				<rev-version>0.3.0</rev-version>
+				<rev-version>0.3.2</rev-version>
 				<changelog lang="en">
 					<change>Fixed issues with undefined variables</change>
 					<change>New Feature:  Enabled options to select first image or last image in topic.</change>
 					<change>New Feature:  Added support for Video BBCode. You are required to use bbcode of [video][/video]. If you use an alternate model, you will need to edit the source code.</change>
+					<change>Minor Bug fixes</change>
 				</changelog>
 			</entry>
 			<entry>
@@ -74,14 +75,14 @@
 			<action type="before-add"><![CDATA[
 //**** Dynamic Facebook Mod
 	if (strpos($row['post_text'],'[img') !== false) {
-		preg_match_all('%\[img[a-z0-9:][^\]]*\](.*?)\[/img%', $row['post_text'],$sMetaResult);
-		foreach ($sMetaResult['1'] as $value) {
+		preg_match_all('%\[img[a-z0-9:][^\]]*\](.*?)\[/img%', $row['post_text'],$sMetaImageResult);
+		foreach ($sMetaImageResult['1'] as $value) {
 			$sMetaBBCImage[] = $value;
 		}
 	}
 	if (strpos($row['post_text'],'[video') !== false) {
-		preg_match_all('%\[video[a-z0-9:][^\]]*\](.*?)\[/video%', $row['post_text'],$sMetaResult);
-		foreach ($sMetaResult['1'] as $value) {
+		preg_match_all('%\[video[a-z0-9:][^\]]*\](.*?)\[/video%', $row['post_text'],$sMetaVideoResult);
+		foreach ($sMetaVideoResult['1'] as $value) {
 			$sMetaBBCVideo[] = $value;
 		}
 	}
